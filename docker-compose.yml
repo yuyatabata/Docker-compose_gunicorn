@@ -3,7 +3,10 @@ services:
   django:
     restart: always
     build: ./django
-    export:
+    tty: true
+    expose:
+      - "3031"
+    depends_on:
       - postgres
     command: bash -c "python manage.py migrate && gunicorn my_docker_project.wsgi -b 0.0.0.0:3031"
     volumes:
@@ -14,7 +17,7 @@ services:
     depends_on:
       - django
     ports:
-      - "80:80"
+      - "80:80" 
     volumes:
       - "./nginx/:/etc/nginx/"
       - "staticdata:/opt/apps/static/"
